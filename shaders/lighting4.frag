@@ -1,12 +1,9 @@
 #version 330 core
 
-layout (location = 0) in vec3 vertex;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec3 color;
-layout (location = 3) in vec2 texCoord;
+out vec4 fragColor;
 
-out vec4 frontColor;
-out vec2 normal;
+in vec3 position;
+in vec3 normal_frag;
 
 uniform mat4 modelViewProjectionMatrix;
 uniform mat3 normalMatrix;
@@ -23,20 +20,20 @@ uniform vec4 matSpecular;    // similar a gl_FrontMaterial.specular
 uniform float matShininess; // similar a gl_FrontMaterial.shininess
 
 
-vec4 light( vec3 N, vec3 L){
+
+vec4 light( vec3 N, vec3 L, vec3 V){
 	// ATENCIO NORMALITZAR TOT, SINO NO FUNCIONA
 	L = normalize(L);
-	vec3 H = normalize(normalize(vec3(0,0,1)) + L);
-	return (matAmbient*lightAmbient) + (matDiffuse*lightDiffuse)*(NL) + (matSpecular*lightSpecular)*pow(NH,matShininess);
+	vec3 R = -reflect(L,N); // IMPORTANT HA DE SER NEGATIU
+	float NL =  max(0, dot(N, L) );
+	float RV =  max(0, dot(normalize(R), normalize(V)));
+	return (matAmbient*lightAmbient) + (matDiffuse*lightDiffuse)*(NL) + (matSpecular*lightSpecular)*pow(RV,matShininess);
 }
+
 
 void main()
 {
-
-    vec3 N   = normalize(normalMatrix * normal);
-    vec3 pos = (modelViewMatrix * vec4(vertex,1.0)).xyz;
-    vec3 L = ( lightPosition.xyz - pos );
-    frontColor = light(N, L);
-    vtexCoord = texCoord;
-    gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0);
+    vec3 L = ( lightPosition.xyz - position );
+	vec3 V = normalize( vec3(0,0,0) - position);
+    fragColor = light(normalize(normal_frag), L, V);
 }

@@ -17,7 +17,6 @@ vec4 GREEN=vec4(0,1,0,1);
 vec4 CYAN=vec4(0,1,1,1);
 vec4 BLUE=vec4(0,0,1,1);
 
-
 void main()
 {
     gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0);
@@ -28,6 +27,6 @@ void main()
     else if(y<3) frontColor = mix(GREEN, CYAN, fract(y));
     else if(y<4) frontColor = mix(CYAN, BLUE, fract(y));
     else frontColor = BLUE;
-    
+
     vtexCoord = texCoord;
 }
