@@ -5,7 +5,6 @@ SUBDIRS += effect-crt
 SUBDIRS += shaderLoader
 SUBDIRS += show-help
 SUBDIRS += alphablending
-
 # Afegiu a SUBDIRS els vostres plugins!
 
 
