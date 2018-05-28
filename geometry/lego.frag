@@ -7,6 +7,8 @@ in vec2 gtexCoord;
 out vec4 fragColor;
 
 uniform sampler2D colorMap;
+uniform sampler2D lego;
+
 
 const vec4 RED=vec4(1,0,0,1);
 const vec4 GREEN=vec4(0,1,0,1);
@@ -30,6 +32,6 @@ vec4 closestColor(vec4 C) {
 void main() {
   vec4 TC=texture2D(colorMap, gtexCoord);
   vec4 C=closestColor(gfrontColor);
-  if (gtop>0) fragColor=C*TC*normalize(gnormal).z;
-  else fragColor=C*normalize(gnormal).z;
+  if (gtop>0) fragColor=texture(lego, gtexCoord)*C*gnormal.z;
+  else fragColor=normalize(gnormal).z*C;
 }
